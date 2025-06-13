@@ -198,4 +198,38 @@ footer {
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
+.contact-hero {
+  background: #fce4ec;
+}
+
+.contact-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.contact-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  width: 100%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.contact-card h2 {
+  color: #ff4081;
+  margin-bottom: 0.5rem;
+}
+
+.contact-card a {
+  color: #ff6600;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 
