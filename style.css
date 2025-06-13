@@ -161,3 +161,25 @@ footer {
   font-size: 1rem;
 }
 
+.flyer-section {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.flyer-img {
+  max-width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.signup-note {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.signup-note a {
+  color: #ff6600;
+  font-weight: bold;
+  text-decoration: none;
+}
+
