@@ -1,15 +1,15 @@
 body {
+  font-family: 'Fredoka', sans-serif;
+  background: #fff9f2;
   margin: 0;
-  font-family: 'Quicksand', sans-serif;
-  background: #fffef9;
   color: #333;
   text-align: center;
 }
 
-header {
-  background: #ffd86d;
-  padding: 2rem 1rem;
-  border-bottom: 5px dashed #ff9a3c;
+.hero {
+  background: #ffe7ad;
+  padding: 2.5rem 1rem;
+  animation: fadeIn 2s ease;
 }
 
 .logo {
@@ -17,61 +17,111 @@ header {
   margin-bottom: 1rem;
 }
 
-h1 {
-  font-family: 'Fredoka One', cursive;
-  font-size: 2.8rem;
+.brand {
   color: #ff6600;
 }
 
-h2 {
-  font-size: 2rem;
-  margin-top: 2rem;
-  color: #3399cc;
-}
-
-section {
-  padding: 1.5rem;
-  max-width: 800px;
-  margin: auto;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  font-size: 1.1rem;
-}
-
-ul li {
-  margin: 0.5rem 0;
-}
-
-.signup-button {
+.signup-btn {
   display: inline-block;
   margin-top: 1rem;
-  background: #00b8d9;
-  color: white;
   padding: 0.8rem 1.5rem;
-  border-radius: 12px;
+  background: #ff8a00;
+  color: white;
   text-decoration: none;
+  border-radius: 12px;
   font-weight: bold;
   font-size: 1.1rem;
-  transition: background 0.3s;
+  transition: background 0.3s ease;
 }
 
-.signup-button:hover {
-  background: #008bb3;
+.signup-btn:hover {
+  background: #e47100;
 }
 
-.pricing-img,
-.hours-img {
-  max-width: 90%;
+.interactive {
+  background: #e9faff;
+  padding: 2rem 1rem;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 1.5rem;
+}
+
+.card {
+  background: white;
   border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 1rem;
+  width: 180px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+  animation: popIn 0.8s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.faq {
+  background: #fff0f7;
+  padding: 2rem 1rem;
+}
+
+.question {
+  margin: 10px auto;
+  max-width: 500px;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.3s ease;
+}
+
+.question:hover {
+  background: #ffddee;
+}
+
+.answer {
+  display: none;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.question.open .answer {
+  display: block;
+  animation: slideDown 0.5s ease;
 }
 
 footer {
-  background: #f2f2f2;
-  padding: 1rem;
+  padding: 20px;
+  background: #fefefe;
   font-size: 0.9rem;
-  margin-top: 2rem;
+  color: #666;
+}
+
+/* Animations */
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
