@@ -255,3 +255,25 @@ footer {
   color: #ff4081;
 }
 
+.sample-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.game-button {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.game-button:hover {
+  background-color: #388e3c;
+}
+
