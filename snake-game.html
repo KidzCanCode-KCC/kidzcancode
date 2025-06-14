@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🐍 Snake Cave Escape</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🐍 Snake Cave Escape Game</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://unpkg.com/blockly/blockly.min.js"></script>
   <style>
@@ -14,13 +14,12 @@
     #gameArea {
       margin: 2rem auto;
       padding: 1rem;
-      background: #e8f5e9;
+      background: #f0f9f9;
       border-radius: 12px;
-      max-width: 800px;
+      max-width: 900px;
       text-align: center;
     }
     canvas {
-      margin-top: 1rem;
       background-color: #222;
       border: 4px solid #77dd77;
       border-radius: 8px;
@@ -37,8 +36,8 @@
   </nav>
 
   <header class="hero">
-    <h1>🐍 Help the Snake Escape the Cave!</h1>
-    <p>Use block code to guide the snake out. Don't crash! 🚧</p>
+    <h1>🐍 Snake Cave Escape</h1>
+    <p>Use block code to help the snake reach the exit! 🚪</p>
   </header>
 
   <section id="gameArea">
@@ -48,56 +47,97 @@
       <block type="move_forward"></block>
       <block type="turn_left"></block>
       <block type="turn_right"></block>
+      <block type="if_wall_ahead"></block>
     </xml>
     <button onclick="runCode()">▶️ Run Code</button>
     <canvas id="snakeCanvas" width="400" height="400"></canvas>
+    <p id="message"></p>
   </section>
 
   <script>
-    // Define custom blocks
     Blockly.defineBlocksWithJsonArray([
+      { "type": "move_forward", "message0": "move forward", "previousStatement": null, "nextStatement": null, "colour": 160 },
+      { "type": "turn_left", "message0": "turn left", "previousStatement": null, "nextStatement": null, "colour": 210 },
+      { "type": "turn_right", "message0": "turn right", "previousStatement": null, "nextStatement": null, "colour": 210 },
       {
-        "type": "move_forward",
-        "message0": "move forward",
+        "type": "if_wall_ahead",
+        "message0": "if wall ahead",
+        "message1": "%1",
+        "args1": [ { "type": "input_statement", "name": "DO" } ],
         "previousStatement": null,
         "nextStatement": null,
-        "colour": 120
-      },
-      {
-        "type": "turn_left",
-        "message0": "turn left",
-        "previousStatement": null,
-        "nextStatement": null,
-        "colour": 210
-      },
-      {
-        "type": "turn_right",
-        "message0": "turn right",
-        "previousStatement": null,
-        "nextStatement": null,
-        "colour": 210
+        "colour": 20
       }
     ]);
 
-    const workspace = Blockly.inject('blocklyDiv', {
-      toolbox: document.getElementById('toolbox')
-    });
+    Blockly.JavaScript["move_forward"] = () => "moveForward();\n";
+    Blockly.JavaScript["turn_left"] = () => "turnLeft();\n";
+    Blockly.JavaScript["turn_right"] = () => "turnRight();\n";
+    Blockly.JavaScript["if_wall_ahead"] = block => {
+      const branch = Blockly.JavaScript.statementToCode(block, "DO");
+      return `if (isWallAhead()) {\n${branch}}\n`;
+    };
 
-    let ctx = document.getElementById('snakeCanvas').getContext('2d');
-    let pos = { x: 200, y: 200 }, dir = 0;
+    const workspace = Blockly.inject("blocklyDiv", { toolbox: document.getElementById("toolbox") });
 
-    function drawSnake() {
+    const canvas = document.getElementById("snakeCanvas");
+    const ctx = canvas.getContext("2d");
+    let map, pos, dir, message;
+
+    function resetGame() {
+      map = [
+        [1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,1,0,0,0,0,1],
+        [1,0,1,0,1,0,1,1,0,1],
+        [1,0,1,0,0,0,0,1,0,1],
+        [1,0,1,1,1,1,0,1,0,1],
+        [1,0,0,0,0,1,0,0,0,1],
+        [1,1,1,1,0,1,1,1,0,1],
+        [1,0,0,1,0,0,0,1,0,1],
+        [1,0,1,1,1,1,0,1,0,1],
+        [1,1,1,1,1,1,0,1,0,2]
+      ];
+      pos = { x: 1, y: 1 };
+      dir = 1; // 0=up, 1=right, 2=down, 3=left
+      message = "";
+      draw();
+    }
+
+    function draw() {
       ctx.clearRect(0, 0, 400, 400);
-      ctx.fillStyle = "#77dd77";
-      ctx.fillRect(pos.x, pos.y, 20, 20);
+      const size = 40;
+      for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 10; x++) {
+          const tile = map[y][x];
+          if (tile === 1) ctx.fillStyle = "#444";
+          else if (tile === 2) ctx.fillStyle = "lime";
+          else ctx.fillStyle = "#eee";
+          ctx.fillRect(x * size, y * size, size, size);
+        }
+      }
+      ctx.fillStyle = "orange";
+      ctx.fillRect(pos.x * size + 5, pos.y * size + 5, size - 10, size - 10);
     }
 
     function moveForward() {
-      if (dir === 0) pos.y -= 20;
-      if (dir === 1) pos.x += 20;
-      if (dir === 2) pos.y += 20;
-      if (dir === 3) pos.x -= 20;
-      drawSnake();
+      const next = { x: pos.x, y: pos.y };
+      if (dir === 0) next.y--;
+      if (dir === 1) next.x++;
+      if (dir === 2) next.y++;
+      if (dir === 3) next.x--;
+      const tile = map[next.y]?.[next.x];
+      if (tile === 1 || tile === undefined) {
+        message = "🚫 You hit a wall! Try again.";
+        draw();
+        throw new Error("Hit a wall");
+      }
+      pos = next;
+      draw();
+      if (map[pos.y][pos.x] === 2) {
+        message = "🎉 You escaped the cave!";
+        document.getElementById("message").innerText = message;
+        throw new Error("Win");
+      }
     }
 
     function turnLeft() {
@@ -108,28 +148,28 @@
       dir = (dir + 1) % 4;
     }
 
+    function isWallAhead() {
+      let nx = pos.x, ny = pos.y;
+      if (dir === 0) ny--;
+      if (dir === 1) nx++;
+      if (dir === 2) ny++;
+      if (dir === 3) nx--;
+      return map[ny]?.[nx] === 1;
+    }
+
     function runCode() {
-      pos = { x: 200, y: 200 };
-      dir = 0;
-      drawSnake();
+      resetGame();
+      document.getElementById("message").innerText = "";
       const code = Blockly.JavaScript.workspaceToCode(workspace);
       try {
         eval(code);
       } catch (e) {
-        alert(e);
+        console.warn(e.message);
+        document.getElementById("message").innerText = message || "⛔️ Something went wrong!";
       }
     }
 
-    // Link block types to functions
-    Blockly.JavaScript['move_forward'] = function() {
-      return 'moveForward();\n';
-    };
-    Blockly.JavaScript['turn_left'] = function() {
-      return 'turnLeft();\n';
-    };
-    Blockly.JavaScript['turn_right'] = function() {
-      return 'turnRight();\n';
-    };
+    resetGame();
   </script>
 
   <footer>
