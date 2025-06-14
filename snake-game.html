@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🐍 Snake Cave Escape</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+  <style>
+    .blocklyDiv {
+      height: 300px;
+      width: 100%;
+    }
+    #gameArea {
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #e8f5e9;
+      border-radius: 12px;
+      max-width: 800px;
+      text-align: center;
+    }
+    canvas {
+      margin-top: 1rem;
+      background-color: #222;
+      border: 4px solid #77dd77;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html">🏠 Home</a>
+    <a href="about.html">📘 About</a>
+    <a href="pricing.html">💰 Pricing</a>
+    <a href="hours.html">🕒 Hours</a>
+    <a href="contact.html">📞 Contact</a>
+  </nav>
+
+  <header class="hero">
+    <h1>🐍 Help the Snake Escape the Cave!</h1>
+    <p>Use block code to guide the snake out. Don't crash! 🚧</p>
+  </header>
+
+  <section id="gameArea">
+    <div id="blocklyDiv" class="blocklyDiv"></div>
+    <xml id="toolbox" style="display: none">
+      <block type="controls_repeat_ext"></block>
+      <block type="move_forward"></block>
+      <block type="turn_left"></block>
+      <block type="turn_right"></block>
+    </xml>
+    <button onclick="runCode()">▶️ Run Code</button>
+    <canvas id="snakeCanvas" width="400" height="400"></canvas>
+  </section>
+
+  <script>
+    // Define custom blocks
+    Blockly.defineBlocksWithJsonArray([
+      {
+        "type": "move_forward",
+        "message0": "move forward",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 120
+      },
+      {
+        "type": "turn_left",
+        "message0": "turn left",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 210
+      },
+      {
+        "type": "turn_right",
+        "message0": "turn right",
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 210
+      }
+    ]);
+
+    const workspace = Blockly.inject('blocklyDiv', {
+      toolbox: document.getElementById('toolbox')
+    });
+
+    let ctx = document.getElementById('snakeCanvas').getContext('2d');
+    let pos = { x: 200, y: 200 }, dir = 0;
+
+    function drawSnake() {
+      ctx.clearRect(0, 0, 400, 400);
+      ctx.fillStyle = "#77dd77";
+      ctx.fillRect(pos.x, pos.y, 20, 20);
+    }
+
+    function moveForward() {
+      if (dir === 0) pos.y -= 20;
+      if (dir === 1) pos.x += 20;
+      if (dir === 2) pos.y += 20;
+      if (dir === 3) pos.x -= 20;
+      drawSnake();
+    }
+
+    function turnLeft() {
+      dir = (dir + 3) % 4;
+    }
+
+    function turnRight() {
+      dir = (dir + 1) % 4;
+    }
+
+    function runCode() {
+      pos = { x: 200, y: 200 };
+      dir = 0;
+      drawSnake();
+      const code = Blockly.JavaScript.workspaceToCode(workspace);
+      try {
+        eval(code);
+      } catch (e) {
+        alert(e);
+      }
+    }
+
+    // Link block types to functions
+    Blockly.JavaScript['move_forward'] = function() {
+      return 'moveForward();\n';
+    };
+    Blockly.JavaScript['turn_left'] = function() {
+      return 'turnLeft();\n';
+    };
+    Blockly.JavaScript['turn_right'] = function() {
+      return 'turnRight();\n';
+    };
+  </script>
+
+  <footer>
+    <p>🌟 © 2025 KidzCanCode | Learn. Create. Inspire.</p>
+  </footer>
+</body>
+</html>
