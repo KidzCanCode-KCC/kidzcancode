@@ -8,8 +8,10 @@
   <script src="https://unpkg.com/blockly/blockly.min.js"></script>
   <style>
     .blocklyDiv {
-      height: 300px;
+      height: 400px;
       width: 100%;
+      overflow: auto;
+      margin-bottom: 1rem;
     }
     #gameArea {
       margin: 2rem auto;
@@ -23,6 +25,7 @@
       background-color: #222;
       border: 4px solid #77dd77;
       border-radius: 8px;
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -44,7 +47,13 @@
   <section id="gameArea">
     <div id="blocklyDiv" class="blocklyDiv"></div>
     <xml id="toolbox" style="display: none">
-      <block type="controls_repeat_ext"></block>
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">3</field>
+          </shadow>
+        </value>
+      </block>
       <block type="move_forward"></block>
       <block type="turn_left"></block>
       <block type="turn_right"></block>
